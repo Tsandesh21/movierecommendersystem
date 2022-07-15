@@ -1,0 +1,65 @@
+{% extends 'recommend/base.html' %}
+{% block content %}
+    
+    <div>
+
+        <h1 class="text-center">{{data.belongs_to_collection.name}} </h1> 
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                <img class="" src="https://image.tmdb.org/t/p/w500/{{data.poster_path}}" alt="Card image" style="width:100%; height: 50%;">
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <!-- <h3>Name : {{data.belongs_to_collection.name}}</h3>
+                <h3>Budget : {{data.budget}}</h3>
+                <h3>Revenue : {{data.revenue}}</h3>
+                <h3>Overview : {{data.overview}}</h3>
+                <h3>Name : {{data.release_date}}</h3> -->
+
+                <table class="table">
+                    <tr>
+                        <td>Title</td>
+                        <td>{{data.title}}</td>
+                    </tr>
+                    <tr>
+                        <td>Release Date</td>
+                        <td>{{data.release_date}}</td>
+                    </tr>
+                    <tr>
+                        <td>Run Time</td>
+                        <td>{{data.runtime}} minutes</td>
+                    </tr>
+                    <tr>
+                        <td>Budget</td>
+                        <td>{{data.budget}}</td>
+                    </tr>
+                    <tr>
+                        <td>Revenue</td>
+                        <td>{{data.revenue}}</td>
+                    </tr>
+                    <tr>
+                        <td>Overview</td>
+                        <td>{{data.overview}}</td>
+                    </tr>
+                    <tr>
+                        <td>Tagline</td>
+                        <td>{{data.tagline}}</td>
+                    </tr>
+                    <tr>
+                        <td>Avg. Vote</td>
+                        <td>{{data.vote_average}} (Total Voters:{{data.vote_count}})</td>
+                    </tr>
+                    <tr>
+                        <td>Tagline</td>
+                        <td>{{data.tagline}}</td>
+                    </tr>
+                </table>
+
+            </div>
+            
+        </div>
+
+        <!-- <img class="" src="https://image.tmdb.org/t/p/w500/{{data.poster_path}}" alt="Card image" style="width:50%; height: 350px;"> -->
+    </div>
+    
+
+{% endblock content %}

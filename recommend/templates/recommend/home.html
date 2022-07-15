@@ -1,0 +1,32 @@
+{% extends 'recommend/base.html' %}
+{% block content %}
+    
+    <div>
+        <form class="" method="POST" action=" ">
+            {% csrf_token %}
+
+            <div class="">
+                <select id="titles" class="" name="titles" required>
+                    <option value="" selected>Select Title</option>
+                    {% for d in data %}
+                        <option value="{{ d}}">{{ d}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="row">
+        <!-- <div class="col-md-4 border border-dark" style="margin-top: 10px;">
+            {{ revenuebyyear|safe }}
+        </div> -->
+
+        <div class="col-md-6 border border-dark" style="margin-top: 10px;">
+            {{ revenuebutgetyear|safe }}
+        </div>
+    </div>
+       
+</div>
+    
+    
+{% endblock content %}
