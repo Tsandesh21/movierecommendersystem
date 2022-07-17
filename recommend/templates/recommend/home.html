@@ -1,28 +1,136 @@
 {% extends 'recommend/base.html' %}
 {% block content %}
     
-    <div>
-        <form class="" method="POST" action=" ">
-            {% csrf_token %}
+    
 
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-6 border border-dark" >
+            <h5 class="text-center">Revenue vs Budget since 2000s</h5>
+            {{ revenuebutgetyear|safe }}
+        </div>
+
+        <div class="col-md-6 border border-dark" >
             <div class="">
-                <select id="titles" class="" name="titles" required>
-                    <option value="" selected>Select Title</option>
-                    {% for d in data %}
-                        <option value="{{ d}}">{{ d}}</option>
-                    {% endfor %}
-                </select>
+                <form class="form" method="POST" action=" ">
+                    {% csrf_token %}
+                    <div class="">
+                        <h5 class="text-center">Select your Movie and see related movies</h5>
+                        <select id="titles" class="form-select" name="titles" required>
+                            <option value="" selected>Select Title</option>
+                            {% for d in data %}
+                                <option value="{{ d}}">{{ d}}</option>
+                            {% endfor %}
+                        </select>
+                    </div><br>
+                    <div class="text-center">
+                        <button type="submit" class="btn-success btn">Show Related Movies</button>
+                    </div>                    
+                </form>
             </div>
-            <button type="submit">Submit</button>
-        </form>
+            <hr>
+
+            <h5 class="text-center">Search Movies by Genres</h5>
+            <form class="form" method="POST" action="moviebygenres">
+                {% csrf_token %}
+                <input type="checkbox" id="genre1" name="genre1" value="Action" checked>
+                <label for="genre1"> Action</label>
+                <input type="checkbox" id="genre2" name="genre2" value="Adventure">
+                <label for="genre2"> Adventure</label>
+                <input type="checkbox" id="genre3" name="genre3" value="Fantasy">
+                <label for="genre3"> Fantasy</label>
+                <input type="checkbox" id="genre4" name="genre4" value="Science Fiction">
+                <label for="genre4"> Science Fiction</label>
+                <input type="checkbox" id="genre5" name="genre5" value="Crime">
+                <label for="genre5"> Crime</label>
+                <input type="checkbox" id="genre6" name="genre6" value="Drama">
+                <label for="genre6"> Drama</label>
+                <input type="checkbox" id="genre7" name="genre7" value="Thriller">
+                <label for="genre7"> Thriller</label>
+                <input type="checkbox" id="genre8" name="genre8" value="Animation">
+                <label for="genre8"> Animation</label>
+                <input type="checkbox" id="genre9" name="genre9" value="Family">
+                <label for="genre9"> Family</label>
+                <input type="checkbox" id="genre10" name="genre10" value="Western">
+                <label for="genre10"> Western</label>
+                <input type="checkbox" id="genre11" name="genre11" value="Comedy">
+                <label for="genre11"> Comedy</label>
+                <input type="checkbox" id="genre12" name="genre12" value="Romance">
+                <label for="genre12"> Romance</label>
+                <input type="checkbox" id="genre13" name="genre13" value="Horror">
+                <label for="genre13"> Horror</label>
+                <input type="checkbox" id="genre14" name="genre14" value="Mystery">
+                <label for="genre14"> Mystery</label>
+                <input type="checkbox" id="genre15" name="genre15" value="History">
+                <label for="genre15"> History</label>
+                <input type="checkbox" id="genre16" name="genre16" value="War">
+                <label for="genre16"> War</label>
+                <input type="checkbox" id="genre17" name="genre17" value="Music">
+                <label for="genre17"> Music</label>
+                <input type="checkbox" id="genre18" name="genre18" value="Documentary">
+                <label for="genre18"> Documentary</label>
+                <input type="checkbox" id="genre19" name="genre19" value="Foreign">
+                <label for="genre19"> Foreign</label>
+                <input type="checkbox" id="genre20" name="genre20" value="TV Movie">
+                <label for="genre20"> TV Movie</label><br>
+                <div class="text-center">
+                    <button type="submit" class="btn-success btn">Search for Movies</button>
+                </div> 
+              </form>
+        </div>
     </div>
+
     <div class="row">
         <!-- <div class="col-md-4 border border-dark" style="margin-top: 10px;">
             {{ revenuebyyear|safe }}
         </div> -->
+        <div class="col-md-4 border border-dark" style="margin-top: 10px;">
+            <h5 class="text-center">Top Movies by Rating(Minimum 200 voters)</h5>
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <td>Movie</td>
+                    <td>Average Vote</td>
+                    <td>Number of Voters</td>
+                </tr>
+                {% for d in topmovierating %}
+                    <tr>
+                        <td>{{d.title}}</td>
+                        <td>{{d.vote_average}}</td>
+                        <td>{{d.vote_count}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <div class="col-md-4 border border-dark" style="margin-top: 10px;">
+            <h5 class="text-center">Popular Movies</h5>
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <td>Movie</td>
+                    <td>Popularity</td>
+                </tr>
+                {% for d in popularmovies %}
+                    <tr>
+                        <td>{{d.title}}</td>
+                        <td>{{d.popularity}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-        <div class="col-md-6 border border-dark" style="margin-top: 10px;">
-            {{ revenuebutgetyear|safe }}
+        <div class="col-md-4 border border-dark" style="margin-top: 10px;">
+            <h5 class="text-center">Top Movies by revenue</h5>
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <td>Movie</td>
+                    <td>Revenue</td>
+                </tr>
+                {% for d in topmoviebyrevenue %}
+                    <tr>
+                        <td>{{d.title}}</td>
+                        <td>{{d.revenue}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
        

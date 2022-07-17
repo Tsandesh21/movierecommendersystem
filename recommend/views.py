@@ -48,19 +48,26 @@ def home(request):
     # revenuebyyear = RevenueByYear(analysisdata)
     revenuebyyear = plotly.offline.plot(RevenueByYear(analysisdata), auto_open = False, output_type="div")
     revenuebutgetyear = plotly.offline.plot(RevenueButgetYear(analysisdata), auto_open = False, output_type="div")
-
+    topmovierating = TopMovieRating(analysisdata)
+    popularmovies = PopularMovies(analysisdata)
+    topmoviebyrevenue=TopMoviesByRevenue(analysisdata)
+    
     
     titles=movies.title
     context = {
                 'data': titles,
                 'revenuebyyear':revenuebyyear,
                 'revenuebutgetyear': revenuebutgetyear,
+                'topmovierating':topmovierating,
+                'popularmovies':popularmovies,
+                'topmoviebyrevenue':topmoviebyrevenue
             }
     if request.method=="POST":    
         selected_movie_name=request.POST["titles"]
         listmovies=recommend(selected_movie_name)
         data = {
                 'listmovies':listmovies,
+                'selected_movie_name':selected_movie_name
             }
         print(selected_movie_name)
         return render(request,'recommend/suggestedmovie.html',data)
@@ -70,7 +77,7 @@ def home(request):
 
 def moviedetail(request,movie):
     # print(movie)
-    id=movies[movies['title']==movie]['movie_id'].values[0]
+    id=movies[movies['title'].str.replace("/","")==movie]['movie_id'].values[0]
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(id)
     data = requests.get(url)
     data = data.json()
@@ -78,3 +85,46 @@ def moviedetail(request,movie):
         'data':data
     }
     return render(request,'recommend/movieinfo.html',context) 
+
+def getgenres(genrecode):
+    genrelist=['Action', 'Adventure', 'Fantasy', 'Science Fiction', 'Crime',
+       'Drama', 'Thriller', 'Animation', 'Family', 'Western', 'Comedy',
+       'Romance', 'Horror', 'Mystery', 'History', 'War', 'Music',
+       'Documentary', 'Foreign', 'TV Movie']
+    l=[]
+    for i in range(1,21):
+        if genrecode[i-1]=="1":
+            l.append(genrelist[i-1])
+    return l
+
+def MovieByGenre(request):
+    query=""
+    cnt=0
+    genrelist=['Action', 'Adventure', 'Fantasy', 'Science Fiction', 'Crime',
+       'Drama', 'Thriller', 'Animation', 'Family', 'Western', 'Comedy',
+       'Romance', 'Horror', 'Mystery', 'History', 'War', 'Music',
+       'Documentary', 'Foreign', 'TV Movie']
+    selectedgenres=[]
+    if request.method=="POST":         
+        for i in range(1,21):
+            genre="genre"+str(i)
+            if request.POST.get(genre):
+                selectedgenres.append(genrelist[i-1])
+                if cnt==0:
+                    query+="genrecode.str.get("+str(i-1)+")=='1'"
+                    cnt+=1
+                else:
+                    query+=" & "
+                    query+="genrecode.str.get("+str(i-1)+")=='1'"
+        topmovies=analysisdata.query(query)[['title','vote_average','vote_count','release_date','revenue','runtime','original_language','genrecode']].sort_values(by='vote_average',ascending=False)
+        topmovies['title_updated']=analysisdata.title.str.replace("/","")
+        topmovies['genres']=topmovies.genrecode.apply(getgenres)
+        topmovies['release_date'] = topmovies['release_date'].dt.strftime('%Y-%m-%d')
+        json_records = topmovies.reset_index().to_json(orient ='records') 
+        data = [] 
+        data = json.loads(json_records)
+        context={
+        'data':data,
+        'selectedgenres':selectedgenres
+        }
+    return render(request,'recommend/moviesbygenre.html',context)

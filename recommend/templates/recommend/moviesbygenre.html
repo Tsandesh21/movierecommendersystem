@@ -1,0 +1,31 @@
+{% extends 'recommend/base.html' %}
+{% block content %}
+    
+        <div class="border border-dark" style="margin-top: 10px;">
+            <h5 class="text-center">Movies By Genre (Soeted by Avg. vote): {{selectedgenres}}</h5>
+            <table class="table table-hover table-bordered">
+                <tr>
+                    <th>Movie</th>
+                    <th>Average Vote</th>
+                    <th>Voters</th>
+                    <th>Release date</th>
+                    <th>Revenue</th>
+                    <th>RunTime</th>
+                    <th>Oridinal Language</th>
+                    <th>Genres</th>
+                </tr>
+                {% for d in data %}
+                    <tr>
+                        <td><a href="{% url 'moviedetail' d.title_updated %}">{{d.title}}</a></td>
+                        <td>{{d.vote_average}}</td>
+                        <td>{{d.vote_count}}</td>
+                        <td>{{d.release_date}}</td>
+                        <td>{{d.revenue}}</td>
+                        <td>{{d.runtime}}</td>
+                        <td>{{d.original_language}}</td>
+                        <td>{{d.genres}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+{% endblock content %}

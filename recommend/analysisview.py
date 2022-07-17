@@ -2,6 +2,7 @@ import pandas as pd
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
+import json
 
 def RevenueByYear(moviesdata):
     data=moviesdata.groupby([moviesdata.release_date.dt.year]).agg({'revenue':'sum'}).sort_values(by='revenue',ascending=False)
@@ -16,21 +17,33 @@ def RevenueButgetYear(moviesdata):
     go_barplot=go_revenue_budget[go_revenue_budget.release_date>=2000]
 
     fig = go.Figure(data=[
-        go.Bar(name='revenue', x=go_barplot.release_date, y=go_barplot.revenue),
-        go.Bar(name='budget', x=go_barplot.release_date, y=go_barplot.budget)
+        go.Bar(name='Revenue', x=go_barplot.release_date, y=go_barplot.revenue),
+        go.Bar(name='Budget', x=go_barplot.release_date, y=go_barplot.budget)
     ])
     fig.update_layout(barmode='group')
-    fig.update_layout(title_text='Revenue And Budget since 2000s')
+    #fig.update_layout(title_text='Revenue And Budget since 2000s')
     return fig
 
-def TopMovieRating():
-    pass
+def TopMovieRating(moviesdata):
+    topmovies=moviesdata[moviesdata['vote_count']>200].sort_values(by='vote_average',ascending=False)[['title','vote_average','vote_count']].head(5)
+    json_records = topmovies.reset_index().to_json(orient ='records') 
+    data = [] 
+    data = json.loads(json_records) 
+    return data
 
-def Popularity():
-    pass
+def PopularMovies(moviesdata):
+    topmovies=moviesdata.sort_values(by='popularity',ascending=False)[['title','popularity']].head(5)
+    json_records = topmovies.reset_index().to_json(orient ='records') 
+    data = [] 
+    data = json.loads(json_records) 
+    return data
 
 def SearchMovieByGenre():
     pass
 
-def TopMoviesByRevenue():
-    pass
+def TopMoviesByRevenue(moviesdata):
+    topmovies=moviesdata.sort_values(by='revenue',ascending=False)[['title','revenue']].head(5)
+    json_records = topmovies.reset_index().to_json(orient ='records') 
+    data = [] 
+    data = json.loads(json_records) 
+    return data
